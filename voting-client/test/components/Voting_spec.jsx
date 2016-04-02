@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactDom from 'react-dom';
+import {List} from 'immutable';
 
 import {
     renderIntoDocument,
@@ -47,6 +49,48 @@ describe('Voting', () => {
         expect(buttons.length).to.equal(2);
         expect(buttons[0].hasAttribute('disabled')).to.equal(true);
         expect(buttons[1].hasAttribute('disabled')).to.equal(true);
+    });
+
+    it('adds label to the voted entry', () => {
+        const component = renderIntoDocument(
+            <Voting pair={['movie1', 'movie2']}
+                    hasVoted='movie1' />
+        );
+        const buttons = scryRenderedDOMComponentsWithTag(component, 'button');
+
+        expect(buttons[0].textContent).to.contain('Voted');
+    });
+
+    it('renders just the winner when there is one', () => {
+        const component = renderIntoDocument(
+            <Voting winner="movie1" />
+        );
+        const buttons = scryRenderedDOMComponentsWithTag(component, 'button');
+        expect(buttons.length).to.equal(0);
+
+        const winner = ReactDom.findDOMNode(component.refs.winner);
+        expect(winner).to.be.ok;
+        expect(winner.textContent).to.contain('movie1');
+    });
+
+    it('renders as a pure component', () => {
+        const pair = List.of('movie1', 'movie2');
+        const container = document.createElement('div');
+        let component = ReactDom.render(
+            <Voting pair={pair} />,
+            container
+        );
+
+        let firstButton = scryRenderedDOMComponentsWithTag(component, 'button')[0];
+        expect(firstButton.textContent).to.equal('movie1');
+
+        pair[0] = 'movie3';
+        component = ReactDom.render(
+            <Voting pair={pair} />,
+            container
+        );
+        firstButton = scryRenderedDOMComponentsWithTag(component, 'button')[0];
+        expect(firstButton.textContent).to.equal('movie1');
     });
 
 });
