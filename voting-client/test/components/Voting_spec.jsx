@@ -8,7 +8,7 @@ import {
     Simulate
 } from 'react-addons-test-utils';
 
-import Voting from '../../src/components/Voting';
+import {Voting} from '../../src/components/Voting';
 import {expect} from 'chai';
 
 describe('Voting', () => {
