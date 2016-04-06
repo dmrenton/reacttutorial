@@ -2,7 +2,7 @@ import {next, setEntries, vote, INITIAL_STATE} from '../src/core';
 
 export default function reducer(state = INITIAL_STATE, action) {
     // why doesn't this line work?
-    // console.log(`received: ${action.toJSON()}`)
+    console.log(`received: ${action.type}`);
 
     switch (action.type){
         case 'SET_ENTRIES':
