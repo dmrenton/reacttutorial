@@ -10,7 +10,8 @@ describe('store', () => {
 
         store.dispatch({type: 'SET_ENTRIES', entries: ['movie1', 'movie2']});
         expect(store.getState()).to.equal(fromJS({
-            entries: ['movie1', 'movie2']
+            entries: ['movie1', 'movie2'],
+            round: 0
         }));
     });
 });

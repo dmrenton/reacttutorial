@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import {List} from 'immutable';
+import {List,Map} from 'immutable';
 
 import {
     renderIntoDocument,
@@ -15,7 +15,7 @@ describe('Voting', () => {
 
     it('renders a pair of buttons', () => {
         const component = renderIntoDocument(
-            <Voting pair={['movie1', 'movie2']}/>
+            <Voting pair={['movie1', 'movie2']} round="1"/>
         );
 
         const buttons = scryRenderedDOMComponentsWithTag(component, 'button');
@@ -30,7 +30,7 @@ describe('Voting', () => {
         const vote = (entry) => votedWith = entry;
 
         const component = renderIntoDocument(
-            <Voting pair={["movie1", "movie2"]} vote={vote} />
+            <Voting pair={["movie1", "movie2"]} vote={vote} round="1"/>
         );
         const buttons = scryRenderedDOMComponentsWithTag(component, 'button');
         Simulate.click(buttons[0]);
@@ -39,9 +39,11 @@ describe('Voting', () => {
     });
 
     it('disables buttons when user has voted', () => {
+        const hasvoted = Map({entry: "movie1", round: 1});
         const component = renderIntoDocument(
             <Voting pair={["movie1", "movie2"]}
-                    hasVoted="movie1" />
+                    hasVoted={hasvoted}
+                    round="1"/>
         );
 
         const buttons = scryRenderedDOMComponentsWithTag(component, 'button');
@@ -52,9 +54,10 @@ describe('Voting', () => {
     });
 
     it('adds label to the voted entry', () => {
+        const hasvoted = Map({entry: "movie1", round: 1});
         const component = renderIntoDocument(
             <Voting pair={['movie1', 'movie2']}
-                    hasVoted='movie1' />
+                    hasVoted={hasvoted} round="1"/>
         );
         const buttons = scryRenderedDOMComponentsWithTag(component, 'button');
 
@@ -77,7 +80,7 @@ describe('Voting', () => {
         const pair = List.of('movie1', 'movie2');
         const container = document.createElement('div');
         let component = ReactDom.render(
-            <Voting pair={pair} />,
+            <Voting pair={pair} round="1"/>,
             container
         );
 
@@ -86,7 +89,7 @@ describe('Voting', () => {
 
         pair[0] = 'movie3';
         component = ReactDom.render(
-            <Voting pair={pair} />,
+            <Voting pair={pair} round="2"/>,
             container
         );
         firstButton = scryRenderedDOMComponentsWithTag(component, 'button')[0];

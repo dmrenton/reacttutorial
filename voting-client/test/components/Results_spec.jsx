@@ -8,11 +8,11 @@ import{expect} from 'chai';
 
 describe('Results', () => {
 
-    it('renders entries with vote counts or zero', () => {
+    it('renders entries with vote counts or zero and which round it is', () => {
         const pair = List.of('movie1', 'movie2');
         const tally = Map({'movie1': 5});
         const component = renderIntoDocument(
-            <Results pair={pair} tally={tally} />
+            <Results pair={pair} tally={tally}/>
         );
         const entries = scryRenderedDOMComponentsWithClass(component, 'entry');
         const [mOne, mTwo] = entries.map(e => e.textContent);
@@ -22,6 +22,11 @@ describe('Results', () => {
         expect(mOne).to.contain('5');
         expect(mTwo).to.contain('movie2');
         expect(mTwo).to.contain('0');
+
+        const whichRound = scryRenderedDOMComponentsWithClass(component, 'whichRound');
+        expect(whichRound.length).to.equal(1);
+        expect(whichRound[0].textContent).to.contain('Round');
+
     });
 
     it('invokes the next callback when next button is clicked', () => {
@@ -32,7 +37,7 @@ describe('Results', () => {
         const component = renderIntoDocument(
             <Results pair={pair}
                      tally={Map()}
-                     next={next} />
+                     next={next}/>
         );
         Simulate.click(ReactDOM.findDOMNode(component.refs.next));
 

@@ -16,6 +16,9 @@ export const Results =  React.createClass({
             return 0;
         }
     },
+    getRound: function(){
+        return this.props.round;
+    },
     render: function () {
         return this.props.winner ?
             <Winner ref="winner" winner={this.props.winner} /> :
@@ -31,6 +34,9 @@ export const Results =  React.createClass({
                 )}
             </div>
             <div className="management">
+                <div className="whichRound">
+                    <h3>Round {this.getRound()}.</h3>
+                    </div>
                 <button ref="next"
                         className="next"
                         onClick={this.props.next}>
@@ -46,6 +52,7 @@ function mapStateToProps(state){
     return {
         pair: state.getIn(['vote', 'pair']),
         tally: state.getIn(['vote', 'tally']),
+        round: state.get('round'),
         winner: state.get('winner')
     };
 };

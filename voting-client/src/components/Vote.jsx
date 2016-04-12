@@ -10,7 +10,7 @@ export default React.createClass({
         return !!this.props.hasVoted;
     },
     hasVotedFor: function(entry){
-        return this.props.hasVoted === entry;
+        return this.props.hasVoted ? this.props.hasVoted.get('entry') === entry : false;
     },
     render: function(){
         return <div className="voting">

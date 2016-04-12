@@ -13,7 +13,8 @@ describe('reducer', () => {
                 vote: Map({
                     pair: List.of('movie1', 'movie2'),
                     tally: Map({movie1: 1})
-                })
+                }),
+                round: 1
             })
         };
         const nextState = reducer(initialState, action);
@@ -22,7 +23,8 @@ describe('reducer', () => {
             vote: {
                 pair: ['movie1', 'movie2'],
                 tally: {movie1: 1}
-            }
+            },
+            round: 1
         }));
     });
 
@@ -34,7 +36,8 @@ describe('reducer', () => {
                 vote: {
                     pair: ['movie1', 'movie2'],
                     tally: {movie1: 1}
-                }
+                },
+                round: 1
             }
         };
         const nextState = reducer(initialState, action);
@@ -43,7 +46,9 @@ describe('reducer', () => {
             vote: {
                 pair: ['movie1', 'movie2'],
                 tally: {movie1: 1}
-            }
+            },
+            round: 1
+
         }));
     });
 
@@ -54,7 +59,8 @@ describe('reducer', () => {
                 vote: {
                     pair: ['movie1', 'movie2'],
                     tally: {movie1: 1}
-                }
+                },
+                round: 1
             }
         };
         const nextState = reducer(undefined, action);
@@ -63,7 +69,8 @@ describe('reducer', () => {
             vote:{
                 pair: ['movie1', 'movie2'],
                 tally: {movie1: 1}
-            }
+            },
+            round: 1
         }));
     });
 
@@ -72,7 +79,8 @@ describe('reducer', () => {
             vote: {
                 pair: ['movie1', 'movie2'],
                 tally: {movie1: 1}
-            }
+            },
+            round: 1
         });
         const action = {type: 'VOTE', entry: 'movie1'};
         const nextState = reducer(state, action);
@@ -82,7 +90,11 @@ describe('reducer', () => {
                 pair: ['movie1', 'movie2'],
                 tally: {movie1: 1}
             },
-            hasVoted: 'movie1'
+            round: 1,
+            hasVoted: {
+                entry: 'movie1',
+                round: 1
+            } 
 
         }));
     });
@@ -92,7 +104,8 @@ describe('reducer', () => {
             vote: {
                 pair: ['movie1', 'movie2'],
                 tally: {movie1: 1}
-            }
+            },
+            round: 1
         });
         const action = {type: 'VOTE', entry: 'movie3'};
         const nextState = reducer(state, action);
@@ -101,7 +114,8 @@ describe('reducer', () => {
             vote: {
                 pair: ['movie1', 'movie2'],
                 tally: {movie1: 1}
-            }
+            },
+            round: 1
 
         }));
 
@@ -113,14 +127,20 @@ describe('reducer', () => {
                 pair: ['movie1', 'movie2'],
                 tally: {movie1: 1}
             },
-            hasVoted: 'movie1'
+            round: 1,
+            hasVoted: {
+                entry: 'movie1',
+                round: 1
+            }
+
         });
         const action = {
             type: 'SET_STATE',
             state: {
                 vote: {
                     pair: ['movie3', 'movie4']
-                }
+                },
+                round: 2
             }
         };
         const nextState = reducer(initialState, action);
@@ -128,8 +148,42 @@ describe('reducer', () => {
         expect(nextState).to.equal(fromJS({
             vote: {
                 pair: ['movie3', 'movie4']
-            }
+            },
+            round: 2
         }));
+
+    });
+
+    it('allows voting as prior winner entries recycle', () => {
+        const initialState = fromJS({
+            vote: {
+                pair: ['movie1', 'movie2'],
+                tally: {movie1: 1}
+            },
+            round: 1,
+            hasVoted: {
+                entry: 'movie1',
+                round: 1
+            }
+        });
+        const action = {
+            type: 'SET_STATE',
+            state: {
+                vote: {
+                    pair: ['movie3', 'movie1'] // movie1 is recycled as a winner since we only have movie 1,2,3 in the list
+                },
+                round: 2
+            }
+        };
+        const nextState = reducer(initialState, action);
+
+        expect(nextState).to.equal(fromJS({
+            vote: {
+                pair: ['movie3', 'movie1']
+            },
+            round: 2
+        }));
+
 
     });
 

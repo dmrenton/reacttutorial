@@ -11,20 +11,23 @@
             const nextState = reducer(initialState, action);
 
             expect(nextState).to.equal(fromJS({
-                entries: ['movie1']
+                entries: ['movie1'],
+                round: 0
             }));
         });
 
         it('handles NEXT', () => {
             const initialState = fromJS({
-                entries: ['movie1', 'movie2']
+                entries: ['movie1', 'movie2'],
+                round: 1
             });
             const action = {type: 'NEXT'};
             const nextState = reducer(initialState, action);
 
             expect(nextState).to.equal(fromJS({
                 vote: {pair: ['movie1', 'movie2']},
-                entries: []
+                entries: [],
+                round: 2
             }));
         });
 
@@ -48,7 +51,8 @@
             const action = {type: 'SET_ENTRIES', entries: ['movie1']};
             const nextState = reducer(undefined, action);
             expect(nextState).to.equal(fromJS({
-                entries: ['movie1']
+                entries: ['movie1'],
+                round: 0
             }));
         });
 
@@ -64,7 +68,8 @@
             const finalState = actions.reduce(reducer, Map());
 
             expect(finalState).to.equal(fromJS({
-                winner: 'movie1'
+                winner: 'movie1',
+                round: 2
             }));
         });
 
