@@ -1,5 +1,6 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Round from './Round';
 
 export default React.createClass({
     mixins: [PureRenderMixin],
@@ -14,6 +15,7 @@ export default React.createClass({
     },
     render: function(){
         return <div className="voting">
+            <Round ref="round" round={this.props.round} />
             {
                 this.getPair().map(
                     entry =>

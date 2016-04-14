@@ -2,6 +2,7 @@ import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
 import Winner from './Winner';
+import Round from './Round';
 import * as actionCreators from '../action_creators';
 
 export const Results =  React.createClass({
@@ -34,9 +35,7 @@ export const Results =  React.createClass({
                 )}
             </div>
             <div className="management">
-                <div className="whichRound">
-                    <h3>Round {this.getRound()}.</h3>
-                    </div>
+                <Round ref="round" round={this.getRound()} />
                 <button ref="next"
                         className="next"
                         onClick={this.props.next}>
